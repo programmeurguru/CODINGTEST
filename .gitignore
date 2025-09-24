@@ -1,0 +1,17 @@
+# Dossiers de build
+bin/
+obj/
+packages/
+
+# Répertoires spécifiques
+x64/
+x86/
+
+# Fichiers temporaires
+*.log
+*.tmp
+
+# Fichiers Visual Studio
+*.user
+*.suo
+.vs/
