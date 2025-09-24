@@ -68,9 +68,10 @@ namespace EventBus3 {
 		EventBus EventBus(subscribersPredicateMap, evQueue, consumers);
 		EventBus.start();
 
-		SubscriberHistoriseTest s1;
-		SubscriberHistoriseTest s2;
-		SubscriberHistoriseTest s3;
+		std::shared_ptr<SubscriberHistoriseTest> s1, s2, s3;
+		s1 = std::make_shared<SubscriberHistoriseTest>() ;
+		s2 = std::make_shared<SubscriberHistoriseTest>();
+		s3 = std::make_shared<SubscriberHistoriseTest>();
 
 		Event e1("EV1", 10.0);
 		Event e2("EV2", 11.0);
@@ -80,9 +81,9 @@ namespace EventBus3 {
 		Event e6("EV2", 14.0);
 		Event e7("EV3", 15.0);
 
-		EventBus.addSubscriber(&s1, e1.getEventType());
-		EventBus.addSubscriber(&s2, e2.getEventType());
-		EventBus.addSubscriber(&s3, e4.getEventType());
+		EventBus.addSubscriber(s1, e1.getEventType());
+		EventBus.addSubscriber(s2, e2.getEventType());
+		EventBus.addSubscriber(s3, e4.getEventType());
 
 		std::thread t(&EventBus::consume, &EventBus);
 
@@ -106,14 +107,14 @@ namespace EventBus3 {
 			t.~thread();
 		}
 
-		EXPECT_EQ(s1._dataHisto.size(), 1);
-		EXPECT_EQ(s1._dataHisto[0], e3);
+		EXPECT_EQ(s1->_dataHisto.size(), 1);
+		EXPECT_EQ(s1->_dataHisto[0], e3);
 
-		EXPECT_EQ(s2._dataHisto.size(), 1);
-		EXPECT_EQ(s2._dataHisto[0], e6);
+		EXPECT_EQ(s2->_dataHisto.size(), 1);
+		EXPECT_EQ(s2->_dataHisto[0], e6);
 
-		EXPECT_EQ(s3._dataHisto.size(), 1);
-		EXPECT_EQ(s3._dataHisto[0], e7);
+		EXPECT_EQ(s3->_dataHisto.size(), 1);
+		EXPECT_EQ(s3->_dataHisto[0], e7);
 
 	}
 }

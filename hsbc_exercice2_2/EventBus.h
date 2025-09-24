@@ -49,12 +49,12 @@ namespace EventBus2
 
 			void publishEvent(const Event & e);
 
-			void addSubscriber(Subscriber * subscriber, const Event::EventType& evType);
+			void addSubscriber(const std::shared_ptr<Subscriber>& subscriber, const Event::EventType& evType);
 
 			// Would you allow clients to filter the events they receive? How would the interface look like?
 			// I expect that the event contains data on which we can define a filter 
 			// for instance a value reaches a threshold
-			void addSubscriberForFilteredEvents(Subscriber * subscriber, const Event::EventType& evtype, Predicate filter);
+			void addSubscriberForFilteredEvents(const std::shared_ptr<Subscriber>& subscriber, const Event::EventType& evtype, Predicate filter);
 
 	};
 

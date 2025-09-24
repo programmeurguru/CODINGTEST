@@ -64,7 +64,7 @@ namespace EventBus3
 			auto events = ExtractLatest(qe, eventMap);
 			for (auto & anEvent : events)
 			{
-				std::vector<Subscriber*> subscribers = _subscribersPredicateMap.getSubscribersFromEvent(anEvent);
+				std::vector<std::shared_ptr<Subscriber>> subscribers = _subscribersPredicateMap.getSubscribersFromEvent(anEvent);
 				for (auto it = subscribers.begin(), itEnd = subscribers.end(); it != itEnd; ++it)
 				{
 					(*it)->consume(anEvent);
@@ -74,14 +74,14 @@ namespace EventBus3
 	}
 
 	// How would you denote the subscriber?
-	void EventBus::addSubscriber(Subscriber* subscriber, const Event::EventType& evType)
+	void EventBus::addSubscriber(std::shared_ptr<Subscriber> subscriber, const Event::EventType& evType)
 	{
 		int ret = _subscribersPredicateMap.insertToSubscriberMap(subscriber, evType, nullptr);
 		//log here filter modified or insert failed
 	}
 
 	// Would you allow clients to filter the events they receive? How would the interface look like?
-	void EventBus::addSubscriberForFilteredEvents(Subscriber* subscriber, const Event::EventType& evType, Predicate filter)
+	void EventBus::addSubscriberForFilteredEvents(std::shared_ptr<Subscriber> subscriber, const Event::EventType& evType, Predicate filter)
 	{
 		int ret = _subscribersPredicateMap.insertToSubscriberMap(subscriber, evType, filter);
 		//log here filter modified

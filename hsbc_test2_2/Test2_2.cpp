@@ -35,17 +35,20 @@ namespace EventBus2 {
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
-		SubscriberHistorizeTest s1, s2, s3;
+		std::shared_ptr<SubscriberHistorizeTest> s1, s2, s3;
+		s1 = std::make_shared<SubscriberHistorizeTest>();
+		s2 = std::make_shared<SubscriberHistorizeTest>(); 
+		s3 = std::make_shared<SubscriberHistorizeTest>(); 
 
-		EventBus.addSubscriber(&s1, "EV1");
+		EventBus.addSubscriber(s1, "EV1");
 
 		{
 			auto it = subscribersMap.find("EV1");
 
 			EXPECT_TRUE(it != subscribersMap.end());
-			std::vector< Subscriber *> & v = it->second;
-			std::vector< Subscriber *>::iterator found = std::find_if(v.begin(), v.end(), [&](auto s) { return s == &s1; });
-			EXPECT_TRUE(*found == &s1);
+			std::vector< std::shared_ptr<Subscriber>> & v = it->second;
+			std::vector< std::shared_ptr<Subscriber>>::iterator found = std::find_if(v.begin(), v.end(), [&](auto s) { return s == s1; });
+			EXPECT_TRUE(*found == s1);
 		}
 
 		Event e1("EV1", 1.1);
@@ -53,7 +56,7 @@ namespace EventBus2 {
 			
 		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
-		EXPECT_EQ(s1._dataHisto[0], e1);
+		EXPECT_EQ(s1->_dataHisto[0], e1);
 
 		EventBus.stop();
 		t.join();
@@ -68,9 +71,9 @@ namespace EventBus2 {
 		EventBus EventBus(subscribersMap, subscribersPredicateMap, evQueue, consumers);
 		EventBus.start();
 
-		SubscriberHistorizeTest s1;
+		std::shared_ptr<SubscriberHistorizeTest> s1 = std::make_shared<SubscriberHistorizeTest>();
 		Event ev("Event1", 10.10);
-		EventBus.addSubscriber(&s1, ev.getEventType());
+		EventBus.addSubscriber(s1, ev.getEventType());
 		std::thread t(&EventBus::notify, &EventBus);
 		EventBus.publishEvent(ev);
 		std::this_thread::sleep_for(std::chrono::milliseconds(4000));
@@ -78,7 +81,7 @@ namespace EventBus2 {
 		EventBus.stop();
 		t.join();
 
-		EXPECT_EQ(s1._dataHisto[0], ev);
+		EXPECT_EQ(s1->_dataHisto[0], ev);
 	}
 
 	TEST(EventBusTest2, EventQueuethreeTest)
@@ -90,15 +93,16 @@ namespace EventBus2 {
 		EventBus EventBus(subscribersMap, subscribersPredicateMap, evQueue, consumers);
 		EventBus.start();
 
-		SubscriberHistorizeTest s1;
-		SubscriberHistorizeTest s2;
-		SubscriberHistorizeTest s3;
+		std::shared_ptr<SubscriberHistorizeTest> s1, s2, s3;
+		s1 = std::make_shared<SubscriberHistorizeTest>();
+		s2 = std::make_shared<SubscriberHistorizeTest>();
+		s3 = std::make_shared<SubscriberHistorizeTest>();
 		Event ev1("Event1", 10.10);
 		Event ev2("Event2", 11.11);
 		Event ev3("Event3", 12.12);
-		EventBus.addSubscriber(&s1, ev1.getEventType());
-		EventBus.addSubscriber(&s2, ev2.getEventType());
-		EventBus.addSubscriber(&s3, ev3.getEventType());
+		EventBus.addSubscriber(s1, ev1.getEventType());
+		EventBus.addSubscriber(s2, ev2.getEventType());
+		EventBus.addSubscriber(s3, ev3.getEventType());
 
 		std::thread t(&EventBus::notify, &EventBus);
 
@@ -112,9 +116,9 @@ namespace EventBus2 {
 
 		t.join();
 
-		EXPECT_EQ(s1._dataHisto[0], ev1);
-		EXPECT_EQ(s2._dataHisto[0], ev2);
-		EXPECT_EQ(s3._dataHisto[0], ev3);
+		EXPECT_EQ(s1->_dataHisto[0], ev1);
+		EXPECT_EQ(s2->_dataHisto[0], ev2);
+		EXPECT_EQ(s3->_dataHisto[0], ev3);
 	}
 
 
@@ -129,18 +133,19 @@ namespace EventBus2 {
 		EventBus EventBus(subscribersMap, subscribersPredicateMap, evQueue, consumers);
 		EventBus.start();
 
-		SubscriberHistorizeTest s1;
-		SubscriberHistorizeTest s2;
-		SubscriberHistorizeTest s3;
+		std::shared_ptr<SubscriberHistorizeTest> s1, s2, s3;
+		s1 = std::make_shared<SubscriberHistorizeTest>();
+		s2 = std::make_shared<SubscriberHistorizeTest>();
+		s3 = std::make_shared<SubscriberHistorizeTest>();
 		Event ev1("Event1", 10.10);
 		Event ev2("Event2", 11.11);
 		Event ev3("Event3", 12.12);
-		EventBus.addSubscriber(&s1, ev1.getEventType());
-		EventBus.addSubscriber(&s1, ev2.getEventType());
-		EventBus.addSubscriber(&s1, ev3.getEventType());
-		EventBus.addSubscriber(&s2, ev2.getEventType());
-		EventBus.addSubscriber(&s2, ev3.getEventType());
-		EventBus.addSubscriber(&s3, ev3.getEventType());
+		EventBus.addSubscriber(s1, ev1.getEventType());
+		EventBus.addSubscriber(s1, ev2.getEventType());
+		EventBus.addSubscriber(s1, ev3.getEventType());
+		EventBus.addSubscriber(s2, ev2.getEventType());
+		EventBus.addSubscriber(s2, ev3.getEventType());
+		EventBus.addSubscriber(s3, ev3.getEventType());
 
 		std::thread t(&EventBus::notify, &EventBus);
 
@@ -153,14 +158,14 @@ namespace EventBus2 {
 		EventBus.stop();
 		t.join();
 
-		EXPECT_EQ(s1._dataHisto[0], ev1);
-		EXPECT_EQ(s1._dataHisto[1], ev2);
-		EXPECT_EQ(s1._dataHisto[2], ev3);
+		EXPECT_EQ(s1->_dataHisto[0], ev1);
+		EXPECT_EQ(s1->_dataHisto[1], ev2);
+		EXPECT_EQ(s1->_dataHisto[2], ev3);
 
-		EXPECT_EQ(s2._dataHisto[0], ev2);
-		EXPECT_EQ(s2._dataHisto[1], ev3);
+		EXPECT_EQ(s2->_dataHisto[0], ev2);
+		EXPECT_EQ(s2->_dataHisto[1], ev3);
 
-		EXPECT_EQ(s3._dataHisto[0], ev3);
+		EXPECT_EQ(s3->_dataHisto[0], ev3);
 
 
 	}

@@ -14,17 +14,12 @@ namespace EventBus1
 	class SubscriberHistoriseTest : public Subscriber
 	{
 	public:
-
-		SubscriberHistoriseTest() = default;
-		SubscriberHistoriseTest(SubscriberHistoriseTest&&) = default;
 		std::vector <Event> _dataHisto;
 
 		void consume(const Event & e) override
 		{
 			_dataHisto.push_back(e);
 		}
-
-		~SubscriberHistoriseTest() = default;
 	};
 
 	TEST(EventBusTest, TestEvent)
@@ -105,7 +100,7 @@ namespace EventBus1
 
 		// the  vector is (pair(subscriber,predicate)
 		VectSubscriberPredicatePair& v = it->second;
-		// search in vezctor the good subscriber
+		// search in vector the good subscriber
 		VectSubscriberPredicatePair::iterator found = std::find_if(v.begin(), v.end(), [&](auto s) { return s.first == s1; });
 		EXPECT_TRUE(found != v.end());
 		// it is the good subscriber
@@ -140,7 +135,7 @@ namespace EventBus1
 
 		// the  vector is (pair(subscriber,predicate)
 		VectSubscriberPredicatePair& v = it->second;
-		// search in vezctor the good subscriber
+		// search in vector the good subscriber
 		VectSubscriberPredicatePair::iterator found = std::find_if(v.begin(), v.end(), [&](auto s) { return s.first == s1; });
 		EXPECT_TRUE(found != v.end());
 		// it is the good subscriber

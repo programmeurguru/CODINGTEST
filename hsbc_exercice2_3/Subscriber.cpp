@@ -13,7 +13,7 @@ namespace EventBus3
 	}
 
 
-	std::vector<Subscriber*> SafeSubscribersPredicateMap::getSubscribersFromEvent(Event anEvent)
+	std::vector<std::shared_ptr<Subscriber>> SafeSubscribersPredicateMap::getSubscribersFromEvent(Event anEvent)
 	{
 		VectSubscriberPredicatePair subscribers;
 		{
@@ -23,12 +23,12 @@ namespace EventBus3
 			SubscribersPredicateMap::iterator it = find(anEvent.getEventType());
 			if (it == end())
 			{
-				return std::vector<Subscriber*>();//return empty
+				return std::vector<std::shared_ptr<Subscriber>>();//return empty
 			}
 
 			subscribers = it->second;// her a copy to avoid lock delay
 		}
-		std::vector<Subscriber*> ret;
+		std::vector<std::shared_ptr<Subscriber>> ret;
 		//now copy all for all with predicate tested 
 		for (SubscriberPredicatePair& subscriberPredPair : subscribers)
 		{
@@ -41,7 +41,7 @@ namespace EventBus3
 	};
 
 	// int retcode : -1=not inserted; 0=OK, +1=filter replaced 
-	int SafeSubscribersPredicateMap::insertToSubscriberMap(Subscriber* subscriber, const Event::EventType& et, Predicate filter)
+	int SafeSubscribersPredicateMap::insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const Event::EventType& et, Predicate filter)
 	{
 		std::lock_guard<std::shared_mutex> lk(_mSubscriber);
 		int ret = 0;

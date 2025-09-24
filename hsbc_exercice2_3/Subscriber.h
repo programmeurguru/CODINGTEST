@@ -22,7 +22,7 @@ namespace EventBus3
 
 	typedef std::function<bool(Event)> Predicate;
 
-	typedef std::pair<Subscriber*, Predicate > SubscriberPredicatePair;
+	typedef std::pair<std::shared_ptr<Subscriber>, Predicate > SubscriberPredicatePair;
 	typedef std::vector<SubscriberPredicatePair> VectSubscriberPredicatePair;
 	typedef std::unordered_map<Event::EventType, VectSubscriberPredicatePair > SubscribersPredicateMap;
 
@@ -31,8 +31,8 @@ namespace EventBus3
 	private:
 		std::shared_mutex _mSubscriber;
 	public:
-		int insertToSubscriberMap(Subscriber* subscriber, const Event::EventType& evtype, Predicate filter);
-		std::vector<Subscriber*> getSubscribersFromEvent(Event anEvent);
+		int insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const Event::EventType& evtype, Predicate filter);
+		std::vector<std::shared_ptr<Subscriber>> getSubscribersFromEvent(Event anEvent);
 	};
 
 };

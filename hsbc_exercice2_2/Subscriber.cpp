@@ -2,7 +2,7 @@
 #include "Subscriber.h"
 namespace EventBus2
 {
-	std::vector<Subscriber*> SharedSubscribersPredicateMap::getSubscribersFromEvent(Event anEvent)
+	std::vector<std::shared_ptr<Subscriber>> SharedSubscribersPredicateMap::getSubscribersFromEvent(Event anEvent)
 	{
 		VectSubscriberPredicatePair subscribers;
 		{
@@ -12,12 +12,12 @@ namespace EventBus2
 			SubscribersPredicateMap::iterator it = find(anEvent.getEventType());
 			if (it == end())
 			{
-				return std::vector<Subscriber*>();//return empty
+				return std::vector<std::shared_ptr<Subscriber>>();//return empty
 			}
 
 			subscribers = it->second;// her a copy to avoid lock delay
 		}
-		std::vector<Subscriber*> ret;
+		std::vector<std::shared_ptr<Subscriber>> ret;
 
 		for (SubscriberPredicatePair& subscriberPredPair : subscribers)
 		{
@@ -30,7 +30,7 @@ namespace EventBus2
 	};
 
 	// int retcode : -1=not inserted; 0=OK, +1=filter replaced 
-	int SharedSubscribersPredicateMap::insertToSubscriberMap(Subscriber* subscriber, const Event::EventType& et, Predicate filter)
+	int SharedSubscribersPredicateMap::insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const Event::EventType& et, Predicate filter)
 	{
 		std::lock_guard<std::shared_mutex> lk(_mSubscriber);
 		int ret = 0;
@@ -70,14 +70,14 @@ namespace EventBus2
 	}
 
 
-	int SharedSubscribersMap::insertToSubscriberMap(Subscriber* subscriber, const Event::EventType& et)
+	int SharedSubscribersMap::insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const Event::EventType& et)
 	{
 		std::lock_guard<std::shared_mutex> lk(_mSubscriber);
 		int ret = 0;
 		SubscribersMap::iterator it = find(et);
 		if (it == end())
 		{
-			auto pairBoolIt = insert(std::make_pair(et, std::vector<Subscriber*>()));
+			auto pairBoolIt = insert(std::make_pair(et, std::vector<std::shared_ptr<Subscriber>>()));
 			if (pairBoolIt.second)
 			{
 				auto& vecSubcriber = pairBoolIt.first->second;
@@ -92,7 +92,7 @@ namespace EventBus2
 		{
 			auto& vecSubcriber = it->second;
 			//if find the subscriber for the same eventType replace it
-			std::vector<Subscriber*>::iterator found =
+			std::vector<std::shared_ptr<Subscriber>>::iterator found =
 				std::find_if(vecSubcriber.begin(), vecSubcriber.end(), [&](auto s) { return s == subscriber; });
 
 			if (found != vecSubcriber.end())
@@ -108,9 +108,9 @@ namespace EventBus2
 		return ret;
 
 	}
-	std::vector<Subscriber*> SharedSubscribersMap::getSubscribersFromEvent(Event anEvent)
+	std::vector<std::shared_ptr<Subscriber>> SharedSubscribersMap::getSubscribersFromEvent(Event anEvent)
 	{
-		std::vector<Subscriber*> subscribers;
+		std::vector<std::shared_ptr<Subscriber>> subscribers;
 		{
 			// many reader possible at the same time
 			std::shared_lock<std::shared_mutex> lk(_mSubscriber);
@@ -118,7 +118,7 @@ namespace EventBus2
 			SubscribersMap::iterator it = find(anEvent.getEventType());
 			if (it == end())
 			{
-				return std::vector<Subscriber*>();//return empty
+				return std::vector<std::shared_ptr<Subscriber>>();//return empty
 			}
 			else
 			{
