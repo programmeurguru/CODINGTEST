@@ -41,7 +41,7 @@ namespace bus_multithread_enhanced
 	};
 
 	// int retcode : -1=not inserted; 0=OK, +1=filter replaced 
-	int SafeSubscribersPredicateMap::insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const Event::Topic& et, Predicate filter)
+	int SafeSubscribersPredicateMap::insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const std::string& et, Predicate filter)
 	{
 		std::lock_guard<std::shared_mutex> lk(_mSubscriber);
 		int ret = 0;

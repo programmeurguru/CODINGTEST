@@ -25,7 +25,7 @@ namespace bus_multithread_enhanced {
 	TEST(bus_multithread_enhanced, ExtractLastest)
 	{
 		std::queue<StampedEvent> qe;
-		std::unordered_map<Event::Topic, unsigned long long int > eventMap;
+		std::unordered_map<std::string, unsigned long long int > eventMap;
 
 		StampedEvent e1(Event("EV1", 10.0));
 		qe.push(e1);

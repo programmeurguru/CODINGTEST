@@ -26,12 +26,12 @@ namespace bus_multithread_enhanced
 		std::atomic<bool> _needStop;
 		std::atomic<bool> _ConsumeTerminated;
 
-		std::thread _consumerThread;
+		std::unique_ptr<std::thread> _consumerThread;
 		
 		SafeSubscribersPredicateMap& _subscribersPredicateMap;
 
 		EventQueue _queue;
-		std::unordered_map<Event::Topic, unsigned long long int > _eventMap;
+		std::unordered_map<std::string, unsigned long long int > _eventMap;
 
 		std::mutex _mQueue;//used for exclusif push and pop Event
 		std::mutex _startstop;//avoid 2 start
@@ -52,11 +52,11 @@ namespace bus_multithread_enhanced
 			}
 			if (!isTerminated())
 			{
-				_consumerThread.detach();
+				_consumerThread->detach();
 			}
 			else
 			{
-				_consumerThread.join();
+				_consumerThread->join();
 			}
 		}
 
@@ -71,14 +71,14 @@ namespace bus_multithread_enhanced
 
 		void publishEvent(Event e);
 
-		void addSubscriber(std::shared_ptr<Subscriber> subscriber, const Event::Topic& evType);
+		void addSubscriber(std::shared_ptr<Subscriber> subscriber, const std::string& evType);
 
 		// Would you allow clients to filter the events they receive? How would the interface look like?
 		// I expect that the event contains data on which we can define a filter 
 		// for instance a value reaches a threshold
-		void addSubscriberForFilteredEvents(std::shared_ptr<Subscriber> subscriber, const Event::Topic& evtype, Predicate filter);
+		void addSubscriberForFilteredEvents(std::shared_ptr<Subscriber> subscriber, const std::string& evtype, Predicate filter);
 
-		static std::vector<Event> ExtractLatest(std::queue<StampedEvent>& qe, const std::unordered_map<Event::Topic, unsigned long long int >& eventMap);
+		static std::vector<Event> ExtractLatest(std::queue<StampedEvent>& qe, const std::unordered_map<std::string, unsigned long long int >& eventMap);
 
 	};
 

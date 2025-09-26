@@ -24,14 +24,14 @@ namespace bus_multithread_enhanced
 
 	typedef std::pair<std::shared_ptr<Subscriber>, Predicate > SubscriberPredicatePair;
 	typedef std::vector<SubscriberPredicatePair> VectSubscriberPredicatePair;
-	typedef std::unordered_map<Event::Topic, VectSubscriberPredicatePair > SubscribersPredicateMap;
+	typedef std::unordered_map<std::string, VectSubscriberPredicatePair > SubscribersPredicateMap;
 
 	class SafeSubscribersPredicateMap : public SubscribersPredicateMap
 	{
 	private:
 		std::shared_mutex _mSubscriber;
 	public:
-		int insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const Event::Topic& evtype, Predicate filter);
+		int insertToSubscriberMap(std::shared_ptr<Subscriber> subscriber, const std::string& evtype, Predicate filter);
 		std::vector<std::shared_ptr<Subscriber>> getSubscribersFromEvent(Event anEvent);
 	};
 }// namespace bus_multithread_enhanced

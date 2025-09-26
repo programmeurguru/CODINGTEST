@@ -18,10 +18,13 @@ namespace bus_multithread_enhanced
 	void EventBus::start()
 	{
 		std::lock_guard<std::mutex> g(_startstop);
-		if(_ConsumeTerminated == true && _needStop == false)
+		if (_ConsumeTerminated == true && _needStop == false)
 		{
-			_consumerThread = std::thread(&EventBus::consume, this);
-			_ConsumeTerminated = false;
+			if (_consumerThread.get() == nullptr)
+			{
+				_consumerThread = std::make_unique<std::thread>(&EventBus::consume, this);
+				_ConsumeTerminated = false;
+			}
 		}
 	}
 
@@ -33,7 +36,7 @@ namespace bus_multithread_enhanced
 		_cvq.notify_all();
 	}
 
-	std::vector<Event> EventBus::ExtractLatest(std::queue<StampedEvent> & qe, const std::unordered_map<Event::Topic, unsigned long long int > & eventMap)
+	std::vector<Event> EventBus::ExtractLatest(std::queue<StampedEvent> & qe, const std::unordered_map<std::string, unsigned long long int > & eventMap)
 	{
 		//the unordered map keep the last number of count
 		std::vector<Event> retq;
@@ -56,7 +59,7 @@ namespace bus_multithread_enhanced
 		while (!_needStop)
 		{
 			std::queue<StampedEvent> qe;
-			std::unordered_map<Event::Topic, unsigned long long int > eventMap;
+			std::unordered_map<std::string, unsigned long long int > eventMap;
 			{
 				std::unique_lock<std::mutex> lk(_mQueue);
 				_cvq.wait(lk, [&]() {return !_queue.empty() || _needStop; });
@@ -86,14 +89,14 @@ namespace bus_multithread_enhanced
 	}
 
 	// How would you denote the subscriber?
-	void EventBus::addSubscriber(std::shared_ptr<Subscriber> subscriber, const Event::Topic& evType)
+	void EventBus::addSubscriber(std::shared_ptr<Subscriber> subscriber, const std::string& evType)
 	{
 		int ret = _subscribersPredicateMap.insertToSubscriberMap(subscriber, evType, nullptr);
 		//log here filter modified or insert failed
 	}
 
 	// Would you allow clients to filter the events they receive? How would the interface look like?
-	void EventBus::addSubscriberForFilteredEvents(std::shared_ptr<Subscriber> subscriber, const Event::Topic& evType, Predicate filter)
+	void EventBus::addSubscriberForFilteredEvents(std::shared_ptr<Subscriber> subscriber, const std::string& evType, Predicate filter)
 	{
 		int ret = _subscribersPredicateMap.insertToSubscriberMap(subscriber, evType, filter);
 		//log here filter modified
