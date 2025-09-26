@@ -1,0 +1,93 @@
+
+emploi 2A1
+
+test en deux parties
+
+Senior development consultant for real-time applications 
+Credit Agricole-CIB
+Montrouge
+06/2023 - 08/2025 	
+Maintained and enhanced real-time market data tools in C# and C++ for IRD trading, focusing on migration to LSEG’s EMA API.
+Led upgrades to the FID Server and integrated EMA for improved data publishing and system performance.
+Implemented CI/CD pipelines, unit testing, and code quality improvements using SonarQube and Checkmarx.
+
+
+Senior development Consultant 
+Societe Generale-CIB
+La Defense
+06/2022 - 04/2023
+Develop and maintain risk tools for external partners using X-One and Risk One, covering interest rate and FX-based products.
+Support a new project focused on FX risk using Greek matrices and real-time market data, ensuring blotter reliability.
+Contribute to architecture design, module integration, and refactoring, including data cube setup and cash flow calculations.
+
+
+Senior consultant font office tools 
+Credit Agricole-CIB
+Montrouge
+01/2021 - 05/2022
+Maintain and enhance in-house C# and C++ tools for equity derivatives trading, covering order management, strategies, and volatility calibration.
+Support option valuation and calibration using Datasynapse grids, ensuring performance and reliability.
+Develop new features, upgrade models, perform corrective maintenance, and provide third-level support.
+
+Senior Consultant Tech lead
+BNP Paribas-CIB 
+paris
+01/2018 - 12/2020
+Support daily ALM Treasury PNL and risk reporting across credit, interest rate, and FX risks via ~30 batch and user-facing applications.
+Maintain legacy systems while migrating to a modern .NET Core microservices architecture.
+Handle module design, infrastructure studies, regulatory updates, development, support, and technical validation.
+
+Senior IT C++ consultant / Team leader 
+HSBC
+paris
+07/2015 - 12/2017
+Lead development of a grid computing 122017system for RWA calculations, supporting future FRTB implementation and large-scale simulations.
+Manage complex pricing computations for 24,000 multi-leg products using Datasynapse grid and extensive market data.
+Oversee architecture design, technical supervision, and developer coordination to meet strict SLA and data distribution challenges.
+
+
+
+Senior IT Consultant C++ / Tech Lead  
+Societe Generale-CIB
+La Defense
+06/2014 - 06/2015
+Maintain and enhance BDOTC and Conso applications, key components in SG’s VaR and stress testing framework.
+Support risk data consolidation, regulatory reporting, and reference data provisioning across entities.
+Contribute to architecture improvements, feature development, technical support, and release management.
+
+Senior Front Office IT Consultant 
+Credit Agricole-CIB
+Montrouge
+06/2011 - 05/2014
+Develop and support INFINITY, a front-office application managing exotic IR portfolios and risks across IR, FX, CDS, and CDOs.
+Build modules for curve stripping, CVA, VAR, sensitivities, and stress tests, integrating a calculation library.
+Handle UI and batch development, third-level support, and technical validation, while responding to business and regulatory needs.
+
+Team Leader front-office development 
+BNP Paribas-CIB 052011
+Paris
+01/2009 - 05/2011
+Develop and support ETG Book, a real-time trading application managing 80,000 structured products across European stock exchanges.
+Implement modules for position tracking, Greeks computation, and automated hedging, with simulation and forecasting features.
+Contribute to new product integration, UI development, feasibility studies, and second-level support.
+
+
+
+
+Senior Front Office IT Consultant 
+BNP Paribas-CIB 
+Paris
+06/2006 - 12/2008
+Develop and support a high-frequency pricing system for 80,000 derivatives across multiple global markets, generating millions of daily orders.
+Enhance contribution strategies, calculation kernels, and market-specific modules, including barrier product logic and UI features.
+Handle feasibility studies, second-level support, configuration, testing, and user training.
+
+R&D Engineer 
+Reuters Financial Software 
+Puteaux
+01/2005 - 02/2006
+Build a customizable pricer generation framework using Kondor+, OpenTrade API, and NumeriX for complex derivatives like cancellable and snowball swaps.
+Design pricing modules, write payoff scripts, and integrate valuation kernels with XML interfaces and OpenTrade engine.
+Conduct feasibility studies, write specifications, perform testing, and provide second-level support.
+
+
